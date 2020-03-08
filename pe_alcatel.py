@@ -15,3 +15,21 @@ def login(child, pe, password, timeout=5):
         child.sendline(password)
         child.expect("#", timeout=timeout)
         return True
+
+def logout(child, timeout=5):
+    
+    child.sendline('logout')
+    child.expect(">", timeout=timeout)
+    return True
+
+def ping(child, vrf, ip, count=None, size=None, timeout=10):
+    if count:
+        if size:
+            child.sendline('ping router {0} {1} {2}'.format(vrf, ip, size))
+        else:
+            child.sendline('ping router {0} {1} {2} {3}'.format(vrf, ip, count, size))
+    else:
+        child.sendline('ping router {0} {1}'.format(vrf, ip))
+
+    child.expect("#", timeout=timeout)
+    return True
