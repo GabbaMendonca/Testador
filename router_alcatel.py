@@ -31,3 +31,29 @@ def login(child, vrf, ip, username, password, timeout=5):
         print("\n*** Epa! Nao conseguimos acessar ***")
         print("\tSenha ou usuario incorretos ... ")
         return
+
+def rodar_testes(child, timeout=5):
+    try:
+        child.sendline("sh ver | i power | up")
+        # child.expect(['#', '>'], timeout=timeout)
+        
+        child.sendline("sh ip bg su | i :")
+        # child.expect(['#', '>'], timeout=timeout)
+        
+        child.sendline("sh ip int br")
+        # child.expect(['#', '>'], timeout=timeout)
+        
+        child.sendline("sh int | i Last clearing")
+        # child.expect(['#', '>'], timeout=timeout)
+        
+        child.sendline("sh int | i CRC")
+        # child.expect(['#', '>'], timeout=timeout)
+        
+        child.sendline("sh int Serial0/0/0")
+        # child.expect(['#', '>'], timeout=timeou\t)
+        
+        child.sendline("sh arp")
+        # child.expect('#', timeout=timeout)
+
+    except Exception:
+        print("Ops! O caminho esta incorreto !")

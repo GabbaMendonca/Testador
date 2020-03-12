@@ -41,3 +41,19 @@ def menu_ssh_alcatel():
         (1) >>> Acessar o router 
         """
     )
+
+def menu_nao_tem():
+    return entrada(
+        """
+        Funcoes ainda nao desenviolvidas !
+        """
+    )
+
+def menu_router_alcatel():
+    return entrada(
+        """
+        Escolha :
+        (0) >>> Assimir o terminal 
+        (1) >>> Rodar testes 
+        """
+    )

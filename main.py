@@ -3,6 +3,7 @@ from terminal import Terminal
 import view
 import server_teste
 import pe_alcatel
+import router_alcatel
 
 
 class Controller():
@@ -17,6 +18,9 @@ class Controller():
             return True
         else:
             return False
+    
+    def interacao(self):
+        self.terminal.interacao()
 
     # --- SERVER TESTES ---
     def server_teste_login(self):
@@ -63,7 +67,23 @@ class Controller():
 
     # --- ROUTER ALCATEL ---
     def router_alcatel_login(self):
-        pass
+        self.vrf = view.entrada("Qual o VRF ?")
+        self.ip = view.entrada("Qual o IP ?")
+        self.executar(
+            router_alcatel.login,
+            self.vrf,
+            self.ip,
+            self.login,
+            self.senha
+        )
+
+    def rodar_testes(self):
+        resp = self.executar(
+            router_alcatel.rodar_testes
+        )
+
+        if resp:
+            print("Comando OK")
 
 
 # ===================================
@@ -99,10 +119,10 @@ class Main():
                 self.pe_ssh_alcatel()
                 
             if entrada == "2":
-                self.telnet()
+                pass
 
             if entrada == "3":
-                self.ping()
+                pass
 
 
 
@@ -127,7 +147,7 @@ class Main():
 
     def telnet(self):
         while True:
-            entrada = view.menu_ssh_alcatel()
+            entrada = view.menu_nao_tem()
 
             if entrada == "0":
                 pass
@@ -143,7 +163,7 @@ class Main():
         
     def ping(self):
         while True:
-            entrada = view.menu_ssh_alcatel()
+            entrada = view.menu_nao_tem()
 
             if entrada == "0":
                 pass
@@ -163,13 +183,14 @@ class Main():
         self.c.router_alcatel_login()
 
         while True:
-            entrada = view.menu_ssh_alcatel()
+            entrada = view.menu_router_alcatel()
 
             if entrada == "0":
-                pass
+                self.c.interacao()
 
             if entrada == "1":
-                pass
+                self.c.rodar_testes()
+                self.c.interacao()
                 
             if entrada == "2":
                 pass
