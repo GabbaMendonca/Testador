@@ -1,15 +1,45 @@
 from terminal import Terminal
 
+import config
+
 import view
 import server_teste
 import pe_alcatel
 import router_alcatel
 
+'10.121.2.8'
+class Config():
+    def config_login(self):
+        dic_ip = config.ler_dicionario('ip_server')
 
-class Controller():
+        if not dic_ip:
+            ip = view.cadastrar_ip_server_testes()
+            config.SERVER_TESTES['ip'] = ip
+            config.gravar_dicionario(config.SERVER_TESTES, 'ip_server')
+            dic_ip = config.ler_dicionario('ip_server')
+            self.ip_server_teste = dic_ip
+        else:
+            self.ip_server_teste = dic_ip['ip']
+
+            dic_login = config.ler_dicionario('login')
+
+            if not dic_login:
+                login = view.entrada("Por favor digite seu Login")
+                senha = view.entrada_senha("Por favor digite sua Senha")
+                config.LOGIN['login'] = login
+                config.LOGIN['senha'] = senha
+                config.gravar_dicionario(config.LOGIN, 'login')
+                dic_login = config.ler_dicionario('login')
+                self.login = dic_login['login']
+                self.senha = dic_login['senha']
+            else:
+                self.login = dic_login['login']
+                self.senha = dic_login['senha']
+
+
+class Controller(Config):
     def __init__(self):
         self.terminal = Terminal()
-        self.ip_server_teste = "10.121.2.8"
 
     def executar(self, funcao, *args, **kwargs):
         imprimir = self.terminal.escreva(funcao, *args, **kwargs)
@@ -24,21 +54,15 @@ class Controller():
 
     # --- SERVER TESTES ---
     def server_teste_login(self):
-        # Coleta os dados para Login
-        while True:
-            self.login = view.entrada("Por favor digite seu Login")
-            self.senha = view.entrada_senha("Por favor digite sua Senha")
+        self.config_login()
+        resp = self.executar(
+            server_teste.login,
+            self.ip_server_teste,
+            self.login,
+            self.senha)
 
-            resp = self.executar(
-                server_teste.login,
-                self.ip_server_teste,
-                self.login,
-                self.senha)
-
-            if resp:
-                break
-            else:
-                exit()
+        if not resp:
+            exit()
 
     # --- PE ALCATEL ---
     def ssh_alcatel(self):

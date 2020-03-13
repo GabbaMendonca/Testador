@@ -20,6 +20,13 @@ def entrada_senha(texto=None):
         print("\n", texto, "\n")
     return getpass(prompt="Escreva <<< ")
 
+def cadastrar_ip_server_testes():
+    return entrada(
+        """
+        Por favor insira o ip do server de teste.
+        """
+    )
+
 
 # ----- MENUS -----
 
