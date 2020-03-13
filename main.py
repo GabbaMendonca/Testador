@@ -40,9 +40,9 @@ class Config():
 class Controller(Config):
     def __init__(self):
         self.terminal = Terminal()
-        self.zerar_vrf_ip()
+        self._zerar_vrf_ip()
 
-    def executar(self, funcao, *args, **kwargs):
+    def _executar(self, funcao, *args, **kwargs):
         imprimir = self.terminal.escreva(funcao, *args, **kwargs)
         if imprimir:
             view.ter_imprimir(imprimir)
@@ -50,17 +50,18 @@ class Controller(Config):
         else:
             return False
     
-    def assumir_terminal(self):
-        self.terminal.assumir_terminal()
-
-    def zerar_vrf_ip(self):
+    def _zerar_vrf_ip(self):
         self.vrf = None
         self.ip = None
     
-    def pegar_vrf_ip(self):
+    def _pegar_vrf_ip(self):
         if (self.vrf or self.ip) == None:
             self.vrf = view.entrada("Qual o VRF ?")
             self.ip = view.entrada("Qual o IP ?")
+
+    def assumir_terminal(self):
+        self.terminal.assumir_terminal()
+
 
 
 
@@ -68,7 +69,7 @@ class Controller(Config):
     # --- SERVER TESTES ---
     def server_teste_login(self):
         self.config_login()
-        resp = self.executar(
+        resp = self._executar(
             server_teste.login,
             self.ip_server_teste,
             self.login,
@@ -82,7 +83,7 @@ class Controller(Config):
     # --- PE ALCATEL ---
     def ssh_alcatel_login(self):
         self.pe_borda_alcatel = view.entrada("Qual o PE ?")
-        resp = self.executar(
+        resp = self._executar(
             pe_alcatel.login,
             self.pe_borda_alcatel,
             self.senha)
@@ -92,9 +93,18 @@ class Controller(Config):
 
     
     def ssh_alcatel_ping(self):        
-        self.pegar_vrf_ip()
-        self.executar(
+        self._pegar_vrf_ip()
+        self._executar(
             pe_alcatel.ping,
+            self.vrf,
+            self.ip
+        )
+
+    
+    def ssh_alcatel_bgp(self):        
+        self._pegar_vrf_ip()
+        self._executar(
+            pe_alcatel.bgp,
             self.vrf,
             self.ip
         )
@@ -107,8 +117,8 @@ class Controller(Config):
 
     # --- ROUTER ALCATEL ---
     def router_alcatel_login(self):
-        self.pegar_vrf_ip()
-        self.executar(
+        self._pegar_vrf_ip()
+        self._executar(
             router_alcatel.login,
             self.vrf,
             self.ip,
@@ -117,7 +127,7 @@ class Controller(Config):
         )
 
     def rodar_testes(self):
-        resp = self.executar(
+        resp = self._executar(
             router_alcatel.rodar_testes
         )
 
@@ -137,6 +147,8 @@ ssh cen-ce-ser-a01
 ENDERECO DO ROUTER
 vrf = 5104
 ip = 100.127.119.170
+
+show router 5104 bgp summary neighbor 100.127.119.170
 """
 
 class Main():
@@ -185,7 +197,7 @@ class Main():
         self.c.ssh_alcatel_ping()
     
     def ssh_alcatel_bgp(self):
-        pass
+        self.c.ssh_alcatel_bgp()
 
 
 

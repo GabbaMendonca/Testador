@@ -33,3 +33,8 @@ def ping(child, vrf, ip, count=None, size=None, timeout=10):
 
     child.expect("#", timeout=timeout)
     return True
+
+def bgp(child, vrf, ip, timeout=10):
+    child.sendline('show router {0} bgp summary neighbor {1}'.format(vrf, ip))
+    child.expect("#", timeout=timeout)
+    return True
