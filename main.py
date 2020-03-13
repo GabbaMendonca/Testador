@@ -40,6 +40,7 @@ class Config():
 class Controller(Config):
     def __init__(self):
         self.terminal = Terminal()
+        self.zerar_vrf_ip()
 
     def executar(self, funcao, *args, **kwargs):
         imprimir = self.terminal.escreva(funcao, *args, **kwargs)
@@ -49,8 +50,20 @@ class Controller(Config):
         else:
             return False
     
-    def interacao(self):
-        self.terminal.interacao()
+    def assumir_terminal(self):
+        self.terminal.assumir_terminal()
+
+    def zerar_vrf_ip(self):
+        self.vrf = None
+        self.ip = None
+    
+    def pegar_vrf_ip(self):
+        if (self.vrf or self.ip) == None:
+            self.vrf = view.entrada("Qual o VRF ?")
+            self.ip = view.entrada("Qual o IP ?")
+
+
+
 
     # --- SERVER TESTES ---
     def server_teste_login(self):
@@ -64,8 +77,10 @@ class Controller(Config):
         if not resp:
             exit()
 
+
+
     # --- PE ALCATEL ---
-    def ssh_alcatel(self):
+    def ssh_alcatel_login(self):
         self.pe_borda_alcatel = view.entrada("Qual o PE ?")
         resp = self.executar(
             pe_alcatel.login,
@@ -76,11 +91,12 @@ class Controller(Config):
             view.imprimir("PE Incorreto")
 
     
-    def pe_alcatel_ping(self, vrf, ip):
+    def ssh_alcatel_ping(self):        
+        self.pegar_vrf_ip()
         self.executar(
             pe_alcatel.ping,
-            vrf,
-            ip
+            self.vrf,
+            self.ip
         )
 
     def telnet(self):
@@ -91,8 +107,7 @@ class Controller(Config):
 
     # --- ROUTER ALCATEL ---
     def router_alcatel_login(self):
-        self.vrf = view.entrada("Qual o VRF ?")
-        self.ip = view.entrada("Qual o IP ?")
+        self.pegar_vrf_ip()
         self.executar(
             router_alcatel.login,
             self.vrf,
@@ -137,39 +152,45 @@ class Main():
             entrada = view.menu_server_testes()
 
             if entrada == "0":
-                pass
+                self.c.assumir_terminal()
 
             if entrada == "1":
-                self.pe_ssh_alcatel()
+                self.ssh_alcatel_pe()
                 
             if entrada == "2":
-                pass
-
-            if entrada == "3":
-                pass
-
+                self.pe_telnet_cisco()
 
 
     # ---- PE'S DE BORDA ----
-    def pe_ssh_alcatel(self):
-        self.c.ssh_alcatel()
+    # ---- ALCATEL ----
+    def ssh_alcatel_pe(self):
+        self.c.ssh_alcatel_login()
 
         while True:
             entrada = view.menu_ssh_alcatel()
 
             if entrada == "0":
-                pass
+                self.c.assumir_terminal()
 
             if entrada == "1":
-                self.router_alcatel()
+                self.ssh_alcatel_router()
                 
             if entrada == "2":
-                pass
+                self.ssh_alcatel_ping()
 
             if entrada == "3":
-                pass
+                self.ssh_alcatel_bgp()
 
-    def telnet(self):
+    def ssh_alcatel_ping(self):
+        self.c.ssh_alcatel_ping()
+    
+    def ssh_alcatel_bgp(self):
+        pass
+
+
+
+
+    def pe_telnet_cisco(self):
         while True:
             entrada = view.menu_nao_tem()
 
@@ -200,21 +221,21 @@ class Main():
 
             if entrada == "3":
                 pass
-        
-        # ---- ROUTERS'S ----
 
-    def router_alcatel(self):
+
+    # ---- ROUTERS'S ----
+    def ssh_alcatel_router(self):
         self.c.router_alcatel_login()
 
         while True:
             entrada = view.menu_router_alcatel()
 
             if entrada == "0":
-                self.c.interacao()
+                self.c.assumir_terminal()
 
             if entrada == "1":
                 self.c.rodar_testes()
-                self.c.interacao()
+                self.c.assumir_terminal()
                 
             if entrada == "2":
                 pass

@@ -32,7 +32,7 @@ class Terminal():
 
     
     @staticmethod
-    def interacao():
+    def assumir_terminal():
     
         try:
             Terminal.child.interact(escape_character=chr(95))
@@ -42,4 +42,3 @@ class Terminal():
 
         except pexpect.TIMEOUT:
             print("TIMEOUT : Ops! Algo errado não esta certo !")
-

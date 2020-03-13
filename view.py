@@ -37,7 +37,6 @@ def menu_server_testes():
         (0) >>> Assimir o terminal 
         (1) >>> ssh 
         (2) >>> telnet
-        (3) >>> ping
         """
     )
 
@@ -45,7 +44,10 @@ def menu_ssh_alcatel():
     return entrada(
         """
         Escolha :
+        (0) >>> Assimir o terminal 
         (1) >>> Acessar o router 
+        (2) >>> Pingar o circuito 
+        (3) >>> Ver BGP 
         """
     )
 
