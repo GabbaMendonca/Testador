@@ -32,6 +32,15 @@ def login(child, vrf, ip, username, password, timeout=5):
         print("\tSenha ou usuario incorretos ... ")
         return
 
+
+def logout(child, timeout=5):
+    try:
+        child.sendline("logout")
+        child.expect(['#', '>'], timeout=timeout)
+        return True
+    except Exception:
+        print("Ops! Não foi possivel dar logout !")
+
 def rodar_testes(child, timeout=5):
     try:
         child.sendline("sh ver | i power | up")

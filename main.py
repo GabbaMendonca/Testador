@@ -82,7 +82,7 @@ class Controller(Config):
 
     # --- PE ALCATEL ---
     def ssh_alcatel_login(self):
-        self.pe_borda_alcatel = view.entrada("Qual o PE ?")
+        self.pe_borda_alcatel = view.entrada("\n\tQual o PE ?\n")
         resp = self._executar(
             pe_alcatel.login,
             self.pe_borda_alcatel,
@@ -109,6 +109,14 @@ class Controller(Config):
             self.ip
         )
 
+    def ssh_alcatel_logout(self):
+            resp = self._executar(
+                pe_alcatel.logout
+            )
+
+            if resp:
+                print("Comando OK")
+
     def telnet(self):
         pass
 
@@ -134,6 +142,13 @@ class Controller(Config):
         if resp:
             print("Comando OK")
 
+    def router_alcatel_logout(self):
+        resp = self._executar(
+            router_alcatel.logout
+        )
+
+        if resp:
+            print("Comando OK")
 
 # ===================================
 """
@@ -156,6 +171,8 @@ class Main():
         self.c = Controller()
         self.server_teste()
 
+
+
     # ---- SERVER TESTES ----
     def server_teste(self):
         self.c.server_teste_login()
@@ -163,14 +180,19 @@ class Main():
         while True:
             entrada = view.menu_server_testes()
 
-            if entrada == "0":
+            if entrada == "9":
                 self.c.assumir_terminal()
+
+            if entrada == "0":
+                exit()
 
             if entrada == "1":
                 self.ssh_alcatel_pe()
                 
             if entrada == "2":
                 self.pe_telnet_cisco()
+            
+
 
 
     # ---- PE'S DE BORDA ----
@@ -181,17 +203,22 @@ class Main():
         while True:
             entrada = view.menu_ssh_alcatel()
 
-            if entrada == "0":
+            if entrada == "9":
                 self.c.assumir_terminal()
+            
+            if entrada == "0":
+                self.c.router_alcatel_logout()
+                break
 
             if entrada == "1":
-                self.ssh_alcatel_router()
-                
-            if entrada == "2":
                 self.ssh_alcatel_ping()
 
+            if entrada == "2":
+                self.ssh_alcatel_router()
+                
             if entrada == "3":
                 self.ssh_alcatel_bgp()
+            
 
     def ssh_alcatel_ping(self):
         self.c.ssh_alcatel_ping()
@@ -201,13 +228,13 @@ class Main():
 
 
 
-
+    # ---- CISCO ----
     def pe_telnet_cisco(self):
         while True:
             entrada = view.menu_nao_tem()
 
-            if entrada == "0":
-                pass
+            if entrada == "9":
+                self.c.assumir_terminal()
 
             if entrada == "1":
                 pass
@@ -222,8 +249,8 @@ class Main():
         while True:
             entrada = view.menu_nao_tem()
 
-            if entrada == "0":
-                pass
+            if entrada == "9":
+                self.c.assumir_terminal()
 
             if entrada == "1":
                 pass
@@ -242,8 +269,12 @@ class Main():
         while True:
             entrada = view.menu_router_alcatel()
 
-            if entrada == "0":
+            if entrada == "9":
                 self.c.assumir_terminal()
+
+            if entrada == "0":
+                self.c.router_alcatel_logout()
+                break
 
             if entrada == "1":
                 self.c.rodar_testes()

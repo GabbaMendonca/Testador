@@ -17,10 +17,12 @@ def login(child, pe, password, timeout=5):
         return True
 
 def logout(child, timeout=5):
-    
-    child.sendline('logout')
-    child.expect(">", timeout=timeout)
-    return True
+    try:
+        child.sendline("logout")
+        child.expect(['#', '>'], timeout=timeout)
+        return True
+    except Exception:
+        print("Ops! Não foi possivel dar logout !")
 
 def ping(child, vrf, ip, count=None, size=None, timeout=10):
     if count:

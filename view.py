@@ -12,7 +12,8 @@ def ter_imprimir(imprimir):
 
 def entrada(texto=None):
     if texto:
-        print("\n", texto, "\n")
+        print(texto)
+        # print("\n", texto, "\n")
     return input("Escreva <<< ")
 
 def entrada_senha(texto=None):
@@ -33,21 +34,27 @@ def cadastrar_ip_server_testes():
 def menu_server_testes():
     return entrada(
         """
+
         Escolha :
-        (0) >>> Assimir o terminal 
         (1) >>> ssh 
         (2) >>> telnet
+        ---
+        (9) >>> Assimir o terminal 
+        (0) <<< Fechar
         """
     )
 
 def menu_ssh_alcatel():
     return entrada(
         """
+
         Escolha :
-        (0) >>> Assimir o terminal 
-        (1) >>> Acessar o router 
-        (2) >>> Pingar o circuito 
+        (1) >>> Pingar o circuito 
+        (2) >>> Acessar o router 
         (3) >>> Ver BGP 
+        ---
+        (9) >>> Assimir o terminal 
+        (0) <<< logout/sair
         """
     )
 
@@ -62,7 +69,9 @@ def menu_router_alcatel():
     return entrada(
         """
         Escolha :
-        (0) >>> Assimir o terminal 
-        (1) >>> Rodar testes 
+        (1) >>> Rodar tdos os testes
+        ---
+        (9) >>> Assimir o terminal 
+        (0) <<< logout/sair
         """
     )
