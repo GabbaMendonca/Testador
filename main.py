@@ -112,8 +112,12 @@ class Config():
 
 
 class Controller(Config):
-    def __init__(self):
-        self.terminal = Terminal()
+    def testes_simulados(self):
+        self.terminal = Terminal(teste=True)
+        self._zerar_vrf_ip()
+    
+    def testes_reais(self):
+        self.terminal = Terminal(teste=False)
         self._zerar_vrf_ip()
 
     def _executar(self, funcao, *args, **kwargs):
@@ -248,8 +252,14 @@ show router 5104 bgp summary neighbor 100.127.119.170
 
 class Main():
     def __init__(self):
-        self.c = Controller()
-    
+        entrada = view.menu_terminal()
+        if entrada == "n":
+            self.c = Controller()
+            self.c.testes_reais()
+        else:
+            self.c = Controller()
+            self.c.testes_simulados()
+
         while True:
             entrada = view.menu_inicial()
 
@@ -258,6 +268,9 @@ class Main():
 
             if entrada == "9":
                 self.configuracoes()
+
+            if entrada == "8":
+                self.c.assumir_terminal()
 
             if entrada == "0":
                 exit()

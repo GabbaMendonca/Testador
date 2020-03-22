@@ -31,6 +31,13 @@ def cadastrar_ip_server_testes():
 
 # ----- MENUS -----
 
+def menu_terminal():
+    return entrada(
+        """
+        Habilitar terminal simulado ? [Enter/n]
+        """
+    )
+
 def menu_inicial():
     return entrada(
         """
