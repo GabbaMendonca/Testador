@@ -31,6 +31,33 @@ def cadastrar_ip_server_testes():
 
 # ----- MENUS -----
 
+def menu_inicial():
+    return entrada(
+        """
+        Bem-Vindo ao testador de Circuitos!
+
+        Escolha :
+        (1) >>> Iniciar
+        (9) >>> Configurações
+        ---
+        (0) <<< Fechar
+        """
+    )
+
+def menu_configuracores():
+    return entrada(
+        """
+        ### Configuraçẽs ###
+
+        Escolha :
+        (1) >>> Trocar IP do Server de testes
+        (2) >>> Trocar senha 1
+        (3) >>> Trocar senha 2
+        ---
+        (0) <<< Voltar
+        """
+    )
+
 def menu_server_testes():
     return entrada(
         """

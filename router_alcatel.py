@@ -1,4 +1,4 @@
-def login(child, vrf, ip, username, password, timeout=5):
+def login(child, vrf, ip, username, password, username2, password2, timeout=5):
     child.sendline("telnet router {0} {1}".format(vrf, ip))
 
     # Digita a senha TACACS
@@ -23,10 +23,10 @@ def login(child, vrf, ip, username, password, timeout=5):
     if index == 1:
         # Digita a senha CPE-RMS
         child.expect(':', timeout=timeout)  # Espera Username
-        child.sendline("cpe-rms")
+        child.sendline(username2)
 
         child.expect(':', timeout=timeout)  # Espera Senha
-        child.sendline("PaneNOT31@")
+        child.sendline(password2)
 
         print("\n*** Epa! Nao conseguimos acessar ***")
         print("\tSenha ou usuario incorretos ... ")

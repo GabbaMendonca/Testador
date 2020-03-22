@@ -10,31 +10,105 @@ import router_alcatel
 '10.121.2.8'
 class Config():
     def config_login(self):
-        dic_ip = config.ler_dicionario('ip_server')
+        dic_ip = config.ler_dicionario('ip_server')  # Tenta ler um arquivo com ip do server
 
-        if not dic_ip:
+        if not dic_ip:   # Verifica se arquivo externo existe
+
+            # Cadastra ip do server
             ip = view.cadastrar_ip_server_testes()
             config.SERVER_TESTES['ip'] = ip
+
+            # Gravar dicionario em arquivo externo
             config.gravar_dicionario(config.SERVER_TESTES, 'ip_server')
             dic_ip = config.ler_dicionario('ip_server')
             self.ip_server_teste = dic_ip
+        
         else:
-            self.ip_server_teste = dic_ip['ip']
+            self.ip_server_teste = dic_ip['ip']  
 
-            dic_login = config.ler_dicionario('login')
+            dic_login = config.ler_dicionario('login')  # Tenta ler um arquivo com login e senha
 
-            if not dic_login:
+            if not dic_login:   # Verifica se arquivo externo existe
+                
+                # Cadastra login e senha
                 login = view.entrada("Por favor digite seu Login")
                 senha = view.entrada_senha("Por favor digite sua Senha")
                 config.LOGIN['login'] = login
                 config.LOGIN['senha'] = senha
+
+                # Coleta dados segundarios do login e senha
+                login = view.entrada("Por favor digite o Login2")
+                senha = view.entrada_senha("Por favor digite a Senha2")
+                config.LOGIN['login2'] = login
+                config.LOGIN['senha2'] = senha
+
+                # Gravar dicionario em arquivo externo
                 config.gravar_dicionario(config.LOGIN, 'login')
                 dic_login = config.ler_dicionario('login')
                 self.login = dic_login['login']
                 self.senha = dic_login['senha']
+                self.login2 = dic_login['login2']
+                self.senha2 = dic_login['senha2']
             else:
                 self.login = dic_login['login']
                 self.senha = dic_login['senha']
+                self.login2 = dic_login['login2']
+                self.senha2 = dic_login['senha2']
+
+    def trocar_o_ip(self):
+        dic_ip = config.ler_dicionario('ip_server')  # Tenta ler um arquivo com ip do server
+
+        if dic_ip:   # Verifica se arquivo externo existe
+
+            # Cadastra ip do server
+            ip = view.cadastrar_ip_server_testes()
+            dic_ip['ip'] = ip
+
+            # Gravar dicionario em arquivo externo
+            config.gravar_dicionario(dic_ip, 'ip_server')
+            dic_ip = config.ler_dicionario('ip_server')
+            self.ip_server_teste = dic_ip['ip']
+        
+        else:
+            raise "Dict nao exite"
+
+    def trocar_a_senha1(self):
+            dic_login = config.ler_dicionario('login')  # Tenta ler um arquivo com login e senha
+
+            if dic_login:   # Verifica se arquivo externo existe
+                
+                # Cadastra login e senha
+                login = view.entrada("Por favor digite seu Login")
+                senha = view.entrada_senha("Por favor digite sua Senha")
+                dic_login['login'] = login
+                dic_login['senha'] = senha
+
+                # Gravar dicionario em arquivo externo
+                config.gravar_dicionario(dic_login, 'login')
+                dic_login = config.ler_dicionario('login')
+                self.login = dic_login['login']
+                self.senha = dic_login['senha']
+            else:
+                raise "Dict nao exite"
+
+    def trocar_a_senha2(self):
+        dic_login = config.ler_dicionario('login')  # Tenta ler um arquivo com login e senha
+
+        if dic_login:   # Verifica se arquivo externo existe
+            
+            # Coleta dados segundarios do login e senha
+            login = view.entrada("Por favor digite o Login2")
+            senha = view.entrada_senha("Por favor digite a Senha2")
+            dic_login['login2'] = login
+            dic_login['senha2'] = senha
+
+            # Gravar dicionario em arquivo externo
+            config.gravar_dicionario(dic_login, 'login')
+            dic_login = config.ler_dicionario('login')
+            self.login2 = dic_login['login2']
+            self.senha2 = dic_login['senha2']
+        else:
+            raise "Dict nao exite"
 
 
 class Controller(Config):
@@ -77,6 +151,7 @@ class Controller(Config):
 
         if not resp:
             exit()
+
 
 
 
@@ -123,6 +198,9 @@ class Controller(Config):
     def ping(self):
         pass
 
+
+
+
     # --- ROUTER ALCATEL ---
     def router_alcatel_login(self):
         self._pegar_vrf_ip()
@@ -131,7 +209,9 @@ class Controller(Config):
             self.vrf,
             self.ip,
             self.login,
-            self.senha
+            self.senha,
+            self.login2,
+            self.senha2
         )
 
     def rodar_testes(self):
@@ -169,6 +249,37 @@ show router 5104 bgp summary neighbor 100.127.119.170
 class Main():
     def __init__(self):
         self.c = Controller()
+    
+        while True:
+            entrada = view.menu_inicial()
+
+            if entrada == "1":
+                self.iniciar()
+
+            if entrada == "9":
+                self.configuracoes()
+
+            if entrada == "0":
+                exit()
+        
+
+    def configuracoes(self):
+        while True:
+            entrada = view.menu_configuracores()
+
+            if entrada == "1":
+                self.c.trocar_o_ip()
+
+            if entrada == "2":
+                self.c.trocar_a_senha1()
+
+            if entrada == "3":
+                self.c.trocar_a_senha2()
+
+            if entrada == "0":
+                break
+    
+    def iniciar(self):
         self.server_teste()
 
 
@@ -192,6 +303,11 @@ class Main():
             if entrada == "2":
                 self.pe_telnet_cisco()
             
+            if entrada == "7":
+                self.c.trocar_o_ip()
+                self.c.trocar_a_senha1()
+                self.c.trocar_a_senha2()
+
 
 
 
