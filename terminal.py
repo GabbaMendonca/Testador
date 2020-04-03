@@ -1,18 +1,35 @@
 import pexpect
 
 class Terminal():
-    def __init__(self, teste=True):
-        if teste:
-            Terminal.terminal_simulacao()
-        else:
-            Terminal.terminal_real()
-
     @staticmethod
-    def terminal_real():
-        Terminal.child = pexpect.spawn('ls')
+    def terminal_real(ip_servidor, username, password):
+
+        Terminal.child = pexpect.spawn('ssh ' + ip_servidor)
         try:
-            Terminal.child.expect('venv')
-            print("Terminal REAL - OK")
+            index = Terminal.child.expect(['Login :', '-01>', '!'], timeout=5)
+
+            if index == 0:
+                Terminal.child.sendline(username)
+            elif index == 1:
+                print("Terminal REAL - OK")
+                return True
+            elif index == 2:
+                print("\n*** Epa! Nao conseguimos acessar ***")
+                print("\tVerifique se o IP esta correto ... ")
+                return False
+
+            Terminal.child.expect('Senha :', timeout=5)
+            Terminal.child.sendline(password)
+
+            index = Terminal.child.expect(['-01>', '!'], timeout=5)
+
+            if index == 0:
+                print("Terminal REAL - OK")
+                return True
+            elif index == 1:
+                print("\n*** Epa! Nao conseguimos acessar ***")
+                print("\tSenha ou usuario incorretos ... ")
+                return False
 
         except pexpect.EOF:
             print("EOF - TERMINAL : Ops! Algo errado nao esta certo !")
@@ -25,12 +42,35 @@ class Terminal():
 
 
     @staticmethod
-    def terminal_simulacao():
+    def terminal_simulacao(ip_servidor, username, password):
         Terminal.child = pexpect.spawn("python router_de_testes/router_testes.py")
 
         try:
-            Terminal.child.expect('>')
-            print("Terminal SIMULADO - OK")
+            Terminal.child.sendline('ssh ' + ip_servidor)
+            index = Terminal.child.expect(['Login :', '-01>', '!'], timeout=5) # TODO : Pendente verificar erro do ip do server estiver errado
+
+            if index == 0:
+                Terminal.child.sendline(username)
+            elif index == 1:
+                print("Terminal SIMULADO - OK")
+                return True
+            elif index == 2:
+                print("\n*** Epa! Nao conseguimos acessar ***")
+                print("\tVerifique se o IP esta correto ... ")
+                return False
+
+            Terminal.child.expect('Senha :', timeout=5)
+            Terminal.child.sendline(password)
+
+            index = Terminal.child.expect(['01>', '!'], timeout=5) # TODO : Pendente verificar erro quando logiun e senha não bater
+
+            if index == 0:
+                print("Terminal SIMULADO - OK")
+                return True
+            elif index == 1:
+                print("\n*** Epa! Nao conseguimos acessar ***")
+                print("\tSenha ou usuario incorretos ... ")
+                return False
 
         except pexpect.EOF:
             print("EOF - TERMINAL : Ops! Algo errado nao esta certo !")

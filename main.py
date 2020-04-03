@@ -113,11 +113,15 @@ class Config():
 
 class Controller(Config):
     def testes_simulados(self):
-        self.terminal = Terminal(teste=True)
+        self.config_login()
+        self.terminal = Terminal()
+        self.terminal.terminal_simulacao(self.ip_server_teste, self.login, self.senha)
         self._zerar_vrf_ip()
     
     def testes_reais(self):
-        self.terminal = Terminal(teste=False)
+        self.config_login()
+        self.terminal = Terminal()
+        self.terminal.terminal_real(self.ip_server_teste, self.login, self.senha)
         self._zerar_vrf_ip()
 
     def _executar(self, funcao, *args, **kwargs):
@@ -139,24 +143,6 @@ class Controller(Config):
 
     def assumir_terminal(self):
         self.terminal.assumir_terminal()
-
-
-
-
-
-    # --- SERVER TESTES ---
-    def server_teste_login(self):
-        self.config_login()
-        resp = self._executar(
-            server_teste.login,
-            self.ip_server_teste,
-            self.login,
-            self.senha)
-
-        if not resp:
-            exit()
-
-
 
 
     # --- PE ALCATEL ---
@@ -252,20 +238,21 @@ show router 5104 bgp summary neighbor 100.127.119.170
 
 class Main():
     def __init__(self):
-        entrada = view.menu_terminal()
-        if entrada == "n":
-            self.c = Controller()
-            self.c.testes_reais()
-        else:
-            self.c = Controller()
-            self.c.testes_simulados()
-
+        self.c = Controller()
+        
         while True:
             entrada = view.menu_inicial()
 
             if entrada == "1":
-                self.iniciar()
+                teste = view.menu_terminal()
 
+                if teste != "n":
+                    self.c.testes_simulados()
+                    self.server_teste()
+                else:
+                    self.c.testes_reais()
+                    self.server_teste()
+                    
             if entrada == "9":
                 self.configuracoes()
 
@@ -292,14 +279,9 @@ class Main():
             if entrada == "0":
                 break
     
-    def iniciar(self):
-        self.server_teste()
-
-
 
     # ---- SERVER TESTES ----
     def server_teste(self):
-        self.c.server_teste_login()
 
         while True:
             entrada = view.menu_server_testes()
