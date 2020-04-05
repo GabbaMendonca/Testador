@@ -4,12 +4,12 @@ class Terminal():
     @staticmethod
     def terminal_real(ip_servidor, username, password):
 
-        Terminal.child = pexpect.spawn('ssh ' + ip_servidor)
+        Terminal.child = pexpect.spawn('ssh ' + str(ip_servidor))
         try:
-            index = Terminal.child.expect(['Login :', '-01>', '!'], timeout=5)
+            index = Terminal.child.expect(['Login :', 'autorizados.', '!'], timeout=5)
 
             if index == 0:
-                Terminal.child.sendline(username)
+                Terminal.child.sendline(str(username))
             elif index == 1:
                 print("Terminal REAL - OK")
                 return True
@@ -19,7 +19,7 @@ class Terminal():
                 return False
 
             Terminal.child.expect('Senha :', timeout=5)
-            Terminal.child.sendline(password)
+            Terminal.child.sendline(str(password))
 
             index = Terminal.child.expect(['-01>', '!'], timeout=5)
 
@@ -62,7 +62,7 @@ class Terminal():
             Terminal.child.expect('Senha :', timeout=5)
             Terminal.child.sendline(password)
 
-            index = Terminal.child.expect(['01>', '!'], timeout=5) # TODO : Pendente verificar erro quando logiun e senha não bater
+            index = Terminal.child.expect(['01>', '!'], timeout=5) # TODO : Pendente verificar erro quando logiun e senha nao bater
 
             if index == 0:
                 print("Terminal SIMULADO - OK")
