@@ -1,25 +1,18 @@
 import pickle #modulo pickle
 
 #dicionário
-LOGIN = { 
-    'login':'',
-    'senha':'',
-    'login2':'',
-    'senha2':'',
-} 
+LOGIN = {}
 
-SERVER_TESTES = {
-    'ip':'',
-}
+IP_SERVER_TESTES = {}
 
-
-def gravar_dicionario(dic, nome:str):
+# ----- MANIPULR ARQUIVOS EXTERNOS -----
+def gravar_dicionario(dicionario, nome_do_arquivo:str):
     try:    
-        arq = open(nome + '.txt','wb') #abrir o arquivo para gravação - o "b" significa que o arquivo é binário
+        arq = open(nome_do_arquivo + '.txt','wb') #abrir o arquivo para gravação - o "b" significa que o arquivo é binário
     except:
         return False
     else:
-        pickle.dump(dic,arq) #Grava uma stream do objeto "dic" para o arquivo.
+        pickle.dump(dicionario,arq) #Grava uma stream do objeto "dic" para o arquivo.
         arq.close() #fechar o arquivo
 
 
@@ -32,3 +25,7 @@ def ler_dicionario(nome:str):
         dic = pickle.load(arq)#Ler a stream a partir do arquivo e reconstroi o objeto original.
         arq.close() #fechar o arquivo
         return dic #retorna o conteúdo do dicionário
+    
+    
+
+# ----- MANIPULR ARQUIVOS EXTERNOS -----
