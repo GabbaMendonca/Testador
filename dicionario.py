@@ -1,5 +1,6 @@
 import pickle  # modulo pickle
 
+
 def _guardar_dicionario(dicionario: dict, nome_do_arquivo: str):
     try:
         # abrir o arquivo para gravação - o "b" significa que o arquivo é binário
@@ -11,6 +12,7 @@ def _guardar_dicionario(dicionario: dict, nome_do_arquivo: str):
         pickle.dump(dicionario, arq)
         arq.close()  # fechar o arquivo
         return True
+
 
 def _pegar_dicionario(nome: str):
     try:
@@ -24,26 +26,31 @@ def _pegar_dicionario(nome: str):
         arq.close()  # fechar o arquivo
         return dic  # retorna o conteúdo do dicionário
 
-def _adicionar_atualizar(dicionario: dict, chave: str, valor: str):
+
+def _adicionar_atualizar_dicionario(dicionario: dict, chave: str, valor: str):
     dicionario[chave] = valor
 
-def _deletar(dicionario: dict, chave: str):
+
+def _deletar_dicionario(dicionario: dict, chave: str):
     try:
         del dicionario[chave]
         return True
     except:
         return False
-    
 
 
-def adicionar_atualizar(nome: str, chave: str, valor: str):
+def adicionar(nome: str, chave: str, valor: str):
     dic = _pegar_dicionario(nome)
 
     if not dic:
         dic = {}
 
-    _adicionar_atualizar(dic, chave, valor)
+    _adicionar_atualizar_dicionario(dic, chave, valor)
     _guardar_dicionario(dic, nome)
+
+
+def atualizar(nome: str, chave: str, valor: str):
+    adicionar(nome, chave, valor)
 
 
 def ler(nome: str):
@@ -56,7 +63,7 @@ def deletar(nome: str, chave: str):
     if not dic:
         return False
 
-    if _deletar(dic, chave):
+    if _deletar_dicionario(dic, chave):
         _guardar_dicionario(dic, nome)
         return True
 
