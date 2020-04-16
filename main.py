@@ -10,6 +10,9 @@ import router_alcatel
 '10.121.2.8'
 
 class Controller():
+    def __init__(self):
+        pass
+
     def testes_simulados(self):
         self.config_login()
         self.terminal = Terminal()

@@ -23,10 +23,107 @@ def entrada_senha(texto=None):
 
 # ----- MENUS -----
 
+# ----- TELA DE BOAS VINDAS -----
 
 
+class ViewBoasVindas():
+    @staticmethod
+    def tela_de_boas_vindas():
+        imprimir(
+"""
+-------------------------------------------------
+|    ### Bem - Vindo ! ###                      |
+|                                               |
+|    Este é o Testador de Circuitos !           |
+-------------------------------------------------
+"""
+        )
+        
+    @staticmethod
+    def tela_de_conclusao_boas_vindas():
+        imprimir(
+"""
+-------------------------------------------------
+|    OK - Estamos preparados para começar !     |
+-------------------------------------------------
+"""
+        )
+        
+
+# ----- SERVER -----
 
 
+class ViewServer():
+    @staticmethod
+    def primeiro_acesso_server():
+        return entrada(
+"""
+-------------------------------------------------
+|    ### Configurações ! ###                    |
+|                                               |
+|    Primeiro vamos fazer algumas               | 
+|    configurações basicas !                    |
+|                                               |
+|    Digite e IP do Server para testes !        |
+-------------------------------------------------            
+"""
+            )
+
+
+# ----- LOGIN -----
+
+
+class ViewLogin():
+    @staticmethod
+    def login_user():
+        return entrada(
+"""
+-------------------------------------------------
+|    ### Configurações ! ###                    |
+|                                               |
+|                                               |
+|    Agora digite o seu usuario (Login OI) !    |
+-------------------------------------------------            
+"""
+        )
+
+    @staticmethod
+    def login_senha():
+        return entrada(
+"""
+-------------------------------------------------
+|    ### Configurações ! ###                    |
+|                                               |
+|                                               |
+|    Agora digite a sua senha !                 |
+-------------------------------------------------         
+"""
+        )
+        
+        
+# ----- MENU INICIAL -----
+class ViewMenuInicial():
+    @staticmethod
+    def menu_inicial():
+        return entrada(
+"""
+-------------------------------------------------
+|    ### Menu Inicial ! ###                     |
+|                                               |
+|    Escolha :                                  | 
+|    (1) >>> Iniciar                            |
+|    (9) >>> Configurações                      |
+|    ---                                        |
+|    (0) <<< Fechar                             |
+-------------------------------------------------         
+"""            
+        )
+
+
+    @staticmethod
+    def modo_terminal():
+        return entrada('Habilitar terminal simulado ? [Enter/n]')
+    
 
 
 def menu_server_testes():
@@ -75,23 +172,7 @@ def menu_router_alcatel():
     )
     
     
-# ----- MENU INICIAL -----
 
-def modo_terminal():
-    return entrada('Habilitar terminal simulado ? [Enter/n]')
-
-def menu_inicial():
-    return entrada(
-        """
-        Bem-Vindo ao testador de Circuitos!
-
-        Escolha :
-        (1) >>> Iniciar
-        (9) >>> Configurações
-        ---
-        (0) <<< Fechar
-        """
-    )
 
 
 # ----- SERVER -----
@@ -112,46 +193,13 @@ def menu_configuracores():
     )
 
 
-# ----- SERVER -----
 
 
-class ViewServer():
-    @staticmethod
-    def server_ip():
-        return entrada('Digite ip de server de testes')
-
-    @staticmethod
-    def server_nome():
-        return entrada('Digite o server de testes')
-    
-    @staticmethod
-    def imprimir_server():
-        ...
 
 
-# ----- LOGIN -----
 
 
-class ViewLogin():
-    @staticmethod
-    def login_user():
-        return entrada('Digite seu login')
-
-    @staticmethod
-    def login_senha():
-        return entrada('Digite sua senha')
 
 
-# ----- TELE DE BOAS VINDAS -----
 
-
-class ViewBoasVindas():
-    @staticmethod
-    def tela_de_boas_vindas():
-        return entrada(
-            """
-            ### Bem - Vindo ! ###
-            """
-        )
-    
     
